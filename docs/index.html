@@ -1723,7 +1723,9 @@ head(dados)</code></pre>
   ) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
 
-### Número de Acidentes por Estado (UF)
+  <img src="../img/Número de Acidentes por Tipo de Causa (Top 20).png" alt="Descrição da imagem" />
+
+<h3> Número de Acidentes por Estado (UF) </h3>
 <pre class="r"><code>ggplot(dados %&gt;% 
          group_by(uf) %&gt;% 
          summarise(total_acidentes = n()) %&gt;% 
@@ -1737,6 +1739,7 @@ head(dados)</code></pre>
     y = &quot;Total de Acidentes&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+  <img src="../img/Número de Acidentes por Estado (UF).png" alt="Descrição da imagem" />
 
 </div>
 <div id="média-de-vítimas-por-tipo-de-acidente" class="section level3">
@@ -1753,9 +1756,12 @@ head(dados)</code></pre>
     y = &quot;Média de Vítimas&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+  <img src="../img/Média de Vítimas por Tipo de Acidente.png" alt="Descrição da imagem" />
+
 
 </div>
 <div id="número-de-feridos-por-estado" class="section level3">
+
 <h3>Número de Feridos por Estado</h3>
 <pre class="r"><code>dados %&gt;%
   group_by(uf) %&gt;%
@@ -1773,6 +1779,7 @@ head(dados)</code></pre>
   
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+  <img src="../img/Número de Feridos por Estado.png" alt="Descrição da imagem" />
 
 </div>
 <div id="número-de-mortos-por-estado" class="section level3">
@@ -1793,7 +1800,7 @@ head(dados)</code></pre>
     
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Número de Mortos por Estado.png" alt="Descrição da imagem" />
 </div>
 <div id="média-de-vítimas-por-estado-uf" class="section level3">
 <h3>Média de Vítimas por Estado (UF)</h3>
@@ -1809,7 +1816,7 @@ head(dados)</code></pre>
     y = &quot;Média de Vítimas&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Média de Vítimas por Estado (UF).png" alt="Descrição da imagem" />
 </div>
 <div id="número-de-acidentes-por-faixa-de-hora-baseado-em-horário" class="section level3">
 <h3>Número de Acidentes por Faixa de Hora (baseado em horário)</h3>
@@ -1829,7 +1836,7 @@ head(dados)</code></pre>
     y = &quot;Total de Acidentes&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Número de Acidentes por Faixa de Hora (baseado em horário).png" alt="Descrição da imagem" />
 </div>
 <div id="análise-de-acidentes-por-classificação-de-acidente" class="section level3">
 <h3>Análise de Acidentes por Classificação de Acidente</h3>
@@ -1845,7 +1852,7 @@ head(dados)</code></pre>
     y = &quot;Total de Acidentes&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Número de Acidentes por Classificação de Acidente.png" alt="Descrição da imagem" />
 </div>
 <div id="distribuição-de-acidentes-por-tipo-de-pista" class="section level3">
 <h3>Distribuição de Acidentes por Tipo de Pista</h3>
@@ -1861,7 +1868,7 @@ head(dados)</code></pre>
     y = &quot;Total de Acidentes&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Número de Acidentes por Tipo de Pista.png" alt="Descrição da imagem" />
 </div>
 <div id="proporção-de-acidentes-com-feridos-leves-e-graves" class="section level3">
 <h3>Proporção de Acidentes com Feridos Leves e Graves</h3>
@@ -1881,7 +1888,7 @@ head(dados)</code></pre>
     x = &quot;Tipo de Ferido&quot;,
     y = &quot;Proporção&quot;
   )</code></pre>
-
+  <img src="../img/Proporção de Feridos Leves e Graves nos Acidentes.png" alt="Descrição da imagem" />
 </div>
 <div id="número-de-acidentes-por-dia-da-semana" class="section level3">
 <h3>Número de Acidentes por Dia da Semana</h3>
@@ -1897,7 +1904,7 @@ head(dados)</code></pre>
     y = &quot;Total de Acidentes&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Número de Acidentes por Dia da Semana.png" alt="Descrição da imagem" />
 </div>
 <div id="análise-de-acidentes-por-causa-e-condição-meteorológica" class="section level3">
 <h3>Análise de Acidentes por Causa e Condição Meteorológica</h3>
@@ -1909,13 +1916,13 @@ head(dados)</code></pre>
     total_feridos_graves = sum(feridos_graves, na.rm = TRUE),
     total_feridos_leves = sum(feridos_leves, na.rm = TRUE)
   ) %&gt;%
-  # Calcular o total de acidentes em cada condição meteorológica
+  # calcula o total de acidentes em cada condição meteorológica
   mutate(total_acidentes = total_mortos + total_feridos + total_feridos_graves + total_feridos_leves)
 
-# Calcular o total geral de acidentes
+# calcula o total geral de acidentes
 total_acidentes_geral &lt;- sum(dados_resumo$total_acidentes, na.rm = TRUE)
 
-# Calcular a porcentagem de acidentes por condição meteorológica
+# calcula a porcentagem de acidentes por condição meteorológica
 dados_resumo &lt;- dados_resumo %&gt;%
   mutate(porcentagem = (total_acidentes / total_acidentes_geral) * 100)
 
@@ -1931,7 +1938,7 @@ ggplot(dados_resumo, aes(x = reorder(condicao_metereologica, -porcentagem), y = 
     fill = &quot;Condição Meteorológica&quot;
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-
+  <img src="../img/Porcentagem de Acidentes por Condição Meteorológica.png" alt="Descrição da imagem" />
 </div>
 </div>
 
