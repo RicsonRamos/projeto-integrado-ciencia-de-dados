@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="pt-br">
 
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta charset="utf-8">
+<meta name="generator" content="pandoc">
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE">
 
 
-<meta name="author" content="Ricson Ramos" />
+<meta name="author" content="Ricson Ramos">
 
-<meta name="date" content="2025-02-20" />
+<meta name="date" content="2025-02-20">
 
 <title>Manipulação e Análise de Dados com R</title>
 
@@ -179,7 +179,7 @@ window.buildTabsets = function(tocID) {
 };
 
 </script>
-<style type="text/css">.hljs-literal {
+<style>.hljs-literal {
 color: #990073;
 }
 .hljs-number {
@@ -197,7 +197,7 @@ font-weight: bold;
 color: #d14;
 }
 </style>
-<style type="text/css">.pagedtable {
+<style>.pagedtable {
 overflow: auto;
 padding-left: 8px;
 padding-right: 8px;
@@ -1469,7 +1469,7 @@ window.onload = function() {
 };
 </script>
 
-<style type="text/css">
+<style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 span.underline{text-decoration: underline;}
@@ -1478,8 +1478,8 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 </style>
 
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
+<style>code{white-space: pre;}</style>
+<script>
 if (window.hljs) {
   hljs.configure({languages: []});
   hljs.initHighlightingOnLoad();
@@ -1497,7 +1497,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
+<style>
 .main-container {
 max-width: 940px;
 margin-left: auto;
@@ -1530,7 +1530,7 @@ padding: 0;
 
 <!-- tabsets -->
 
-<style type="text/css">
+<style>
 .tabset-dropdown > .nav-tabs {
 display: inline-table;
 max-height: 500px;
@@ -1723,7 +1723,7 @@ head(dados)</code></pre>
   ) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))</code></pre>
 
-### Número de Acidentes por Estado (UF)</p>
+### Número de Acidentes por Estado (UF)
 <pre class="r"><code>ggplot(dados %&gt;% 
          group_by(uf) %&gt;% 
          summarise(total_acidentes = n()) %&gt;% 
