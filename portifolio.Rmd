@@ -1,0 +1,282 @@
+---
+title: "Manipulação e Análise de Dados com R"
+author: "Ricson Ramos"
+date: "2025-02-20"
+output:
+  pdf_document: default
+  word_document: default
+encoding: "UTF-8"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, results='show', message=FALSE, warning=TRUE, fig.width=12, fig.height=8)
+```
+
+## Importação de Bibliotecas
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+## Carregamento dos Dados
+```{r}
+dados <- read.csv("datatran2024.csv", sep = ";", fill = TRUE, check.names = FALSE, encoding = "latin1")
+```
+
+## Exploração Inicial dos Dados
+
+```{r}
+##Estrutura das Variáveis
+str(dados)
+
+##Resumo Estatístico
+summary(dados)
+
+##Visualização das Primeiras Linhas
+head(dados)
+
+```
+
+## Análises Exploratórias
+
+###  Número de Acidentes por Tipo de Causa (Top 20)
+```{r}
+ggplot(dados %>%
+         group_by(causa_acidente) %>%
+         summarise(total = n()) %>%
+         arrange(desc(total)) %>%
+         head(20), aes(x = reorder(causa_acidente, -total), y = total)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  theme_minimal() +
+  labs(
+    title = "Número de Acidentes por Tipo de Causa (Top 10)",
+    x = "Causa do Acidente",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+###  Número de Acidentes por Estado (UF)
+```{r}
+ggplot(dados %>% 
+         group_by(uf) %>% 
+         summarise(total_acidentes = n()) %>% 
+         arrange(desc(total_acidentes)),
+       aes(x = reorder(uf, -total_acidentes), y = total_acidentes)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  theme_minimal() + 
+  labs(
+    title = "Número de Acidentes por Estado (UF)",
+    x = "Estado (UF)",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+###  Média de Vítimas por Tipo de Acidente
+```{r}
+ggplot(dados %>%
+         group_by(tipo_acidente) %>%
+         summarise(media_vitimas = mean(pessoas, na.rm = TRUE)) %>%
+         arrange(desc(media_vitimas)), aes(x = reorder(tipo_acidente, -media_vitimas), y = media_vitimas)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  theme_minimal() +
+  labs(
+    title = "Média de Vítimas por Tipo de Acidente",
+    x = "Tipo de Acidente",
+    y = "Média de Vítimas"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Número de Feridos por Estado
+```{r}
+dados %>%
+  group_by(uf) %>%
+  summarise(
+    total_feridos = sum(feridos, na.rm = TRUE)
+  ) %>%
+  arrange(desc(total_feridos)) %>%  # Organiza do maior para o menor
+  ggplot(aes(x = reorder(uf, -total_feridos), y = total_feridos)) +
+  geom_bar(stat = "identity", fill = "yellow") + 
+  theme_minimal() +
+  labs(
+    title = "Número de Feridos por Estado",
+    x = "Estado (UF)",
+    y = "Total de Feridos",
+  
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+### Número de Mortos por Estado
+```{r}
+dados %>%
+  group_by(uf) %>%
+  summarise(
+    total_mortos = sum(mortos, na.rm = TRUE)
+  ) %>%
+  arrange(desc(total_mortos)) %>% 
+  ggplot(aes(x = reorder(uf, -total_mortos), y = total_mortos)) +
+  geom_bar(stat = "identity", fill = "red") + 
+  theme_minimal() +
+  labs(
+    title = "Número de Feridos por Estado",
+    x = "Estado (UF)",
+    y = "Total de Mortos",
+    
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+### Média de Vítimas por Estado (UF)
+```{r}
+ggplot(dados %>%
+         group_by(uf) %>%
+         summarise(media_vitimas = mean(pessoas, na.rm = TRUE)) %>%
+         arrange(desc(media_vitimas)), aes(x = reorder(uf, -media_vitimas), y = media_vitimas)) +
+  geom_bar(stat = "identity", fill = "lightgreen") +
+  theme_minimal() +
+  labs(
+    title = "Média de Vítimas por Estado",
+    x = "Estado v",
+    y = "Média de Vítimas"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+###  Número de Acidentes por Faixa de Hora (baseado em horário)
+```{r}
+dados %>%
+  mutate(faixa_horaria = cut(as.numeric(substr(horario, 1, 2)),
+                             breaks = seq(0, 24, by = 3), 
+                             labels = paste0(seq(0, 21, by = 3), "-", seq(3, 24, by = 3)),
+                             include.lowest = TRUE)) %>%
+  group_by(faixa_horaria) %>%
+  summarise(total_acidentes = n()) %>%
+  ggplot(aes(x = faixa_horaria, y = total_acidentes)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  theme_minimal() +
+  labs(
+    title = "Número de Acidentes por Faixa Horária",
+    x = "Faixa Horária",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+###  Análise de Acidentes por Classificação de Acidente
+```{r}
+ggplot(dados %>%
+         group_by(classificacao_acidente) %>%
+         summarise(total_acidentes = n()) %>%
+         arrange(desc(total_acidentes)), aes(x = reorder(classificacao_acidente, -total_acidentes), y = total_acidentes)) +
+  geom_bar(stat = "identity", fill = "purple") +
+  theme_minimal() +
+  labs(
+    title = "Número de Acidentes por Classificação de Acidente",
+    x = "Classificação do Acidente",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Distribuição de Acidentes por Tipo de Pista
+
+```{r}
+ggplot(dados %>%
+         group_by(tipo_pista) %>%
+         summarise(total_acidentes = n()) %>%
+         arrange(desc(total_acidentes)), aes(x = reorder(tipo_pista, -total_acidentes), y = total_acidentes)) +
+  geom_bar(stat = "identity", fill = "lightcoral") +
+  theme_minimal() +
+  labs(
+    title = "Número de Acidentes por Tipo de Pista",
+    x = "Tipo de Pista",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+### Proporção de Acidentes com Feridos Leves e Graves
+```{r}
+dados %>%
+  summarise(
+    proporcao_feridos_leves = sum(feridos_leves, na.rm = TRUE) / n(),
+    proporcao_feridos_graves = sum(feridos_graves, na.rm = TRUE) / n()
+  ) %>%
+  pivot_longer(cols = c(proporcao_feridos_leves, proporcao_feridos_graves), 
+               names_to = "tipo_ferido", 
+               values_to = "proporcao") %>%
+  ggplot(aes(x = tipo_ferido, y = proporcao, fill = tipo_ferido)) +
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  labs(
+    title = "Proporção de Feridos Leves e Graves nos Acidentes",
+    x = "Tipo de Ferido",
+    y = "Proporção"
+  )
+
+
+```
+
+### Número de Acidentes por Dia da Semana
+```{r}
+ggplot(dados %>%
+         group_by(dia_semana) %>%
+         summarise(total_acidentes = n()) %>%
+         arrange(desc(total_acidentes)), aes(x = reorder(dia_semana, -total_acidentes), y = total_acidentes)) +
+  geom_bar(stat = "identity", fill = "green") +
+  theme_minimal() +
+  labs(
+    title = "Número de Acidentes por Dia da Semana",
+    x = "Dia da Semana",
+    y = "Total de Acidentes"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
+### Análise de Acidentes por Causa e Condição Meteorológica
+```{r}
+dados_resumo <- dados %>%
+  group_by(condicao_metereologica) %>%
+  summarise(
+    total_mortos = sum(mortos, na.rm = TRUE),
+    total_feridos = sum(feridos, na.rm = TRUE),
+    total_feridos_graves = sum(feridos_graves, na.rm = TRUE),
+    total_feridos_leves = sum(feridos_leves, na.rm = TRUE)
+  ) %>%
+  # Calcular o total de acidentes em cada condição meteorológica
+  mutate(total_acidentes = total_mortos + total_feridos + total_feridos_graves + total_feridos_leves)
+
+# Calcular o total geral de acidentes
+total_acidentes_geral <- sum(dados_resumo$total_acidentes, na.rm = TRUE)
+
+# Calcular a porcentagem de acidentes por condição meteorológica
+dados_resumo <- dados_resumo %>%
+  mutate(porcentagem = (total_acidentes / total_acidentes_geral) * 100)
+
+# Criar o gráfico com a porcentagem de acidentes por condição meteorológica
+ggplot(dados_resumo, aes(x = reorder(condicao_metereologica, -porcentagem), y = porcentagem, fill = condicao_metereologica)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +  # Formatar o eixo Y para porcentagem
+  theme_minimal() +
+  labs(
+    title = "Porcentagem de Acidentes por Condição Meteorológica",
+    x = "Condição Meteorológica",
+    y = "Porcentagem de Acidentes",
+    fill = "Condição Meteorológica"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
