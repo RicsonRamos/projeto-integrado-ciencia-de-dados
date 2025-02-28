@@ -5,6 +5,8 @@ date: "2025-02-20"
 output:
   pdf_document: default
   word_document: default
+  html_document:
+    df_print: paged
 encoding: "UTF-8"
 ---
 
